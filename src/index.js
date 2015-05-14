@@ -48,6 +48,15 @@ app.post('/webhook/nplol', function (req, res) {
   })
 });
 
+app.get('/', function(req, res) {
+  LastSeen.find().exec(function(err, docs) {
+    if (err) res.status(500).send('Ey! Something went wrong with the db');
+    else res.send(docs.map(function(doc) {
+      return { username: doc.username, lastSeen: doc.lastSeen }
+      }));
+  });
+});
+
 app.listen(PORT, function() {
   console.log('Server is running at ' + PORT)
 });
