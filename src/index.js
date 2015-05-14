@@ -49,7 +49,7 @@ app.post('/webhook/nplol', function (req, res) {
   LastSeen.find({ username: username }).limit(1).exec(function(err, docs) {
     if (err) throw new Error(err);
     else if (docs.length == 0) return create(message, next)
-    else return update(doc, message.timestamp, next);
+    else return update(docs[0], message.timestamp, next);
   })
 });
 
