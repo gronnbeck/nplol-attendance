@@ -1,13 +1,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 
 var PORT = process.env.PORT || 8000;
-var URI_MONGODB = process.env.MONGOLAB_URI || 'mongodb://localhost/nplol-attend';
+var MONGODB_URI = process.env.MONGOLAB_URI || 'mongodb://localhost/nplol-attend';
 
 mongoose.connect(MONGODB_URI)
 
-var LastSeen = mongoose.model({
+var LastSeen = mongoose.model('LastSeen', {
   username: String,
   lastSeen: String
 });
