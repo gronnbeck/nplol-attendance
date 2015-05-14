@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 
 var PORT = process.env.PORT || 8000;
 var MONGODB_URI = process.env.MONGOLAB_URI || 'mongodb://localhost/nplol-attend';
+var NPLOL_WEBHOOK_KEY = process.env.NPLOL_WEBHOOK_KEY;
 
 mongoose.connect(MONGODB_URI)
 
@@ -36,6 +37,10 @@ function update(doc, timestamp, next) {
 }
 
 app.post('/webhook/nplol', function (req, res) {
+  var key = req.query.key;
+  if (key != NPLOL_WEBHOOK_KEY) {
+    throw new Error('Unauthorized');
+  }
   var message = req.body;
   var username = message.user_name;
   var next = function() {
