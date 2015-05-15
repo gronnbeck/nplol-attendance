@@ -1,5 +1,5 @@
 {
-  "name": "nplol-attendence",
+  "name": "nplol-attendance",
   "version": "1.0.0",
   "description": "Last attendence of members of NPLOL",
   "main": "index.js",
