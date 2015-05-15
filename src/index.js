@@ -1,17 +1,14 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var moment = require('moment');
+var LastSeen = require('./last-seen');
 
 var PORT = process.env.PORT || 8000;
 var MONGODB_URI = process.env.MONGOLAB_URI || 'mongodb://localhost/nplol-attend';
 var NPLOL_WEBHOOK_KEY = process.env.NPLOL_WEBHOOK_KEY;
 
 mongoose.connect(MONGODB_URI)
-
-var LastSeen = mongoose.model('LastSeen', {
-  username: String,
-  lastSeen: String
-});
 
 var app = express();
 app.use(bodyParser.json());
@@ -53,11 +50,19 @@ app.post('/webhook/nplol', function (req, res) {
   })
 });
 
+var parseDate = function(date) {
+  if (date == null) return null;
+  else return moment.unix(date)._d;
+}
+
 app.get('/', function(req, res) {
   LastSeen.find().exec(function(err, docs) {
     if (err) res.status(500).send('Ey! Something went wrong with the db');
     else res.send(docs.map(function(doc) {
-      return { username: doc.username, lastSeen: doc.lastSeen }
+      return {
+        username: doc.username,
+        lastSeen: parseDate(doc.lastSeen)
+      }
       }));
   });
 });
